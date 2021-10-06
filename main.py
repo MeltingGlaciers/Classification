@@ -20,7 +20,7 @@ data = np.array(data, dtype=float)
 np.random.shuffle(data)
 labels = data[:,-1]
 data = data[:,:-1]
-data_separator = 50
+data_separator = 60
 modelKN = KNeighborsClassifier(n_neighbors=3)
 modelKN.fit(data[:data_separator],labels[:data_separator])
 predictKN = modelKN.predict(data[data_separator:])
@@ -29,13 +29,17 @@ modelSVC = SVC()
 modelSVC.fit(data[:data_separator],labels[:data_separator])
 predictSVC = modelSVC.predict(data[data_separator:])
 print('SVC: ',accuracy_score(predictSVC,labels[data_separator:]))
+print("decreasing features count")
 
-# ref_data = load_iris()
-#
-# ref_data.drop('Id', axis=1, inplace=True)
-#
-# X = ref_data.iloc[:,:-1].values
-#
-# y = ref_data['Species']
-#
-# X = ref_data.iloc['SepalLengthCm', 'SepalWidthCm', 'PetalLengthCm']
+#Уменьшаем колво признаков
+for i in range(10):
+    data = data[:,:-1]
+    modelKN = KNeighborsClassifier(n_neighbors=3)
+    modelKN.fit(data[:data_separator], labels[:data_separator])
+    predictKN = modelKN.predict(data[data_separator:])
+    print("for ",len(data[0]))
+    print("KNeighborsClassifier: ", accuracy_score(predictKN, labels[data_separator:]))
+    modelSVC = SVC()
+    modelSVC.fit(data[:data_separator], labels[:data_separator])
+    predictSVC = modelSVC.predict(data[data_separator:])
+    print('SVC: ', accuracy_score(predictSVC, labels[data_separator:]))
